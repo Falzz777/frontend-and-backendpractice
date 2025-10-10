@@ -1,44 +1,421 @@
 <!DOCTYPE html>
 <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Товары</title>
-        <link rel="stylesheet" href="../style/styles.css">
-    </head>
-    <body>
-        <div class="page-container">
-            <div class="header">Товары Баранова Павла</div>
-            <div class="nav">
-                <ul class="nav-list">
-                    <li class="nav-item"><a class="nav-link" href="../index.html">Главная</a></li>
-                    <li class="nav-item"><a class="nav-link" href="news.html">Новости</a></li>
-                    <li class="nav-item"><a class="nav-link" href="practices.html">Практики</a></li> 
-                    <li class="nav-item"><a class="nav-link" href="goods.html">Товары</a></li>
-                    <li class="nav-item"><a class="nav-link" href="contacts.html">Контакты</a></li>
-                </ul>
-            </div>
-            <div class="content">
-                <h2 class="section-title">Наши товары.</h2>
-                <div class="products-grid">
-                    <div class="product-card">
-                        <img class="product-image" src="../images/0p46sGDNAv0.jpg" alt="Фото товара 1">
-                        <h3 class="product-name">ДеБуст ММР Титан - Рекрут</h3>
-                        <p class="product-price">1 Рубль /2 игра брат</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Товары</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../style/styles.css">
+    <style>
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .product-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+        }
+        .price-tag {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        .category-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1;
+        }
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cart-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .quantity-btn:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container-fluid p-0">
+        <!-- Header -->
+        <header class="bg-primary text-white py-4">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h1 class="h3 mb-0">Товары Баранова Павла</h1>
                     </div>
-                    <div class="product-card">
-                        <img class="product-image" src="../images/89059bca-5b6d-42b3-b4c2-9df607ed4bf3.jpg" alt="Фото товара 2">
-                        <h3 class="product-name">Сейчас начнется тряска</h3>
-                        <p class="product-price">∞ EURO</p>
-                    </div>
-                    <div class="product-card">
-                        <img class="product-image" src="../images/6c4f5427-ed63-44e4-8a8d-e047c8d9c09a.jpg" alt="Фото товара 3">
-                        <h3 class="product-name">Продам мопса в добрые руки!!!</h3>
-                        <p class="product-price">1 RUB</p>
+                    <div class="col-auto">
+                        <!-- Кнопка корзины -->
+                        <button class="btn btn-outline-light position-relative" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
+                            <i class="bi bi-cart3"></i>
+                            Корзина
+                            <span id="cartBadge" class="cart-badge">0</span>
+                        </button>
                     </div>
                 </div>
             </div>
-            <div class="footer">2025 ООО "Тлиз"</div>    
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../index.html">
+                                <i class="bi bi-house me-1"></i>Главная
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="news.html">
+                                <i class="bi bi-newspaper me-1"></i>Новости
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="practices.html">
+                                <i class="bi bi-code-slash me-1"></i>Практики
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="goods.html">
+                                <i class="bi bi-cart me-1"></i>Товары
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contacts.html">
+                                <i class="bi bi-telephone me-1"></i>Контакты
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="container my-4">
+            <!-- Заголовок категории -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card bg-dark text-white">
+                        <div class="card-body text-center py-4">
+                            <h1 class="display-6 mb-2">Наши товары</h1>
+                            <h2 class="h4 mb-1">DOTA 2</h2>
+                            <h3 class="h5 text-warning">УСЛУГИ</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Подкатегория -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h3 class="text-center mb-4 border-bottom pb-2">
+                        <i class="bi bi-arrow-down-circle text-primary me-2"></i>
+                        СЛИВ РЕЙТИНГА
+                    </h3>
+                </div>
+            </div>
+
+            <!-- Карточки товаров -->
+            <section class="mb-5">
+                <div class="row g-4">
+                    <!-- Товар 1 -->
+                    <div class="col-md-4">
+                        <div class="card h-100 product-card position-relative">
+                            <span class="category-badge badge bg-success">Хит</span>
+                            <div class="card-body text-center">
+                                <img src="../images/0p46sGDNAv0.jpg" class="product-image" alt="Дебуст ММР Титан - Рекрут">
+                                <h5 class="card-title">Дебуст ММР Титан - Рекрут</h5>
+                                <p class="card-text text-muted small">
+                                    Профессиональный буст MMR для начинающих игроков
+                                </p>
+                                <div class="price-tag mb-3">1 Рубль / 2 игры</div>
+                                <button class="btn btn-primary w-100" onclick="addToCart(1, 'Дебуст ММР Титан - Рекрут', 1, '../images/0p46sGDNAv0.jpg')">
+                                    <i class="bi bi-cart-plus me-2"></i>В корзину
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Товар 2 -->
+                    <div class="col-md-4">
+                        <div class="card h-100 product-card position-relative">
+                            <span class="category-badge badge bg-warning text-dark">Эксклюзив</span>
+                            <div class="card-body text-center">
+                                <img src="../images/89059bca-5b6d-42b3-b4c2-9df607ed4bf3.jpg" class="product-image" alt="Сейчас начнется тряска">
+                                <h5 class="card-title">Сейчас начнется тряска</h5>
+                                <p class="card-text text-muted small">
+                                    Эксклюзивный контент для настоящих ценителей
+                                </p>
+                                <div class="price-tag mb-3">∞ EURO</div>
+                                <button class="btn btn-warning w-100" onclick="addToCart(2, 'Сейчас начнется тряска', 999999, '../images/89059bca-5b6d-42b3-b4c2-9df607ed4bf3.jpg')">
+                                    <i class="bi bi-cart-plus me-2"></i>В корзину
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Товар 3 -->
+                    <div class="col-md-4">
+                        <div class="card h-100 product-card position-relative">
+                            <span class="category-badge badge bg-info">Бесплатно</span>
+                            <div class="card-body text-center">
+                                <img src="../images/6c4f5427-ed63-44e4-8a8d-e047c8d9c09a.jpg" class="product-image" alt="Продам мопса в добрые руки">
+                                <h5 class="card-title">Продам мопса в добрые руки!!!</h5>
+                                <p class="card-text text-muted small">
+                                    Милый мопс ищет любящую семью
+                                </p>
+                                <div class="price-tag mb-3">1 RUB</div>
+                                <button class="btn btn-info text-white w-100" onclick="addToCart(3, 'Продам мопса в добрые руки', 1, '../images/6c4f5427-ed63-44e4-8a8d-e047c8d9c09a.jpg')">
+                                    <i class="bi bi-cart-plus me-2"></i>В корзину
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-dark text-white py-4 mt-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p class="mb-0">&copy; 2025 ООО "Тлиз". Все права защищены.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <a href="contacts.html" class="text-white text-decoration-none me-3">Контакты</a>
+                        <a href="#" class="text-white text-decoration-none">Политика конфиденциальности</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Оффканвас корзины -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="cartOffcanvasLabel">
+                <i class="bi bi-cart3 me-2"></i>Корзина
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-    </body>
+        <div class="offcanvas-body">
+            <div id="cartItems" class="mb-3">
+                <!-- Товары корзины будут здесь -->
+                <div class="text-center text-muted py-4">
+                    <i class="bi bi-cart-x display-4"></i>
+                    <p class="mt-2">Корзина пуста</p>
+                </div>
+            </div>
+            <div class="border-top pt-3">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Итого:</span>
+                    <span id="cartTotal">0 RUB</span>
+                </div>
+                <button class="btn btn-primary w-100" onclick="checkout()">
+                    <i class="bi bi-credit-card me-2"></i>Оформить заказ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Массив товаров в корзине
+        let cart = [];
+
+        // Функция добавления в корзину
+        function addToCart(id, name, price, image) {
+            const existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: id,
+                    name: name,
+                    price: price,
+                    image: image,
+                    quantity: 1
+                });
+            }
+            
+            updateCart();
+            showNotification('Товар добавлен в корзину!');
+        }
+
+        // Функция обновления корзины
+        function updateCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartBadge = document.getElementById('cartBadge');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            // Обновляем бейдж
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartBadge.textContent = totalItems;
+            
+            // Обновляем список товаров
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-cart-x display-4"></i>
+                        <p class="mt-2">Корзина пуста</p>
+                    </div>
+                `;
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div class="row align-items-center">
+                            <div class="col-3">
+                                <img src="${item.image}" alt="${item.name}" class="img-fluid rounded">
+                            </div>
+                            <div class="col-6">
+                                <h6 class="mb-1">${item.name}</h6>
+                                <p class="mb-0 text-muted">${formatPrice(item.price)}</p>
+                            </div>
+                            <div class="col-3">
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn" onclick="changeQuantity(${item.id}, -1)">-</button>
+                                    <span>${item.quantity}</span>
+                                    <button class="quantity-btn" onclick="changeQuantity(${item.id}, 1)">+</button>
+                                </div>
+                                <button class="btn btn-sm btn-outline-danger mt-1 w-100" onclick="removeFromCart(${item.id})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Обновляем итоговую сумму
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotal.textContent = formatPrice(total);
+        }
+
+        // Функция изменения количества
+        function changeQuantity(id, change) {
+            const item = cart.find(item => item.id === id);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(id);
+                } else {
+                    updateCart();
+                }
+            }
+        }
+
+        // Функция удаления из корзины
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCart();
+            showNotification('Товар удален из корзины');
+        }
+
+        // Функция форматирования цены
+        function formatPrice(price) {
+            if (price === 999999) {
+                return '∞ EURO';
+            }
+            return price + ' RUB';
+        }
+
+        // Функция уведомления
+        function showNotification(message) {
+            // Создаем уведомление
+            const notification = document.createElement('div');
+            notification.className = 'alert alert-success position-fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.zIndex = '9999';
+            notification.style.minWidth = '300px';
+            notification.innerHTML = `
+                <i class="bi bi-check-circle me-2"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Удаляем уведомление через 3 секунды
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Функция оформления заказа
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('Корзина пуста!');
+                return;
+            }
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const orderDetails = cart.map(item => 
+                `${item.name} x${item.quantity} - ${formatPrice(item.price * item.quantity)}`
+            ).join('\n');
+            
+            alert(`Заказ оформлен!\n\n${orderDetails}\n\nИтого: ${formatPrice(total)}\n\nСпасибо за покупку!`);
+            
+            // Очищаем корзину
+            cart = [];
+            updateCart();
+            
+            // Закрываем корзину
+            const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('cartOffcanvas'));
+            offcanvas.hide();
+        }
+
+        // Инициализация корзины при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCart();
+        });
+    </script>
+</body>
 </html>
