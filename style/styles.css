@@ -259,9 +259,11 @@ body {
 }
 
 /* ===== ТОВАРЫ - CSS GRID ===== */
+/* ===== ТОВАРЫ - CSS GRID ===== */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 колонки в ряд */
     gap: 30px;
     margin-top: 30px;
 }
@@ -275,6 +277,11 @@ body {
     transition: transform 0.3s ease;
     color: #b96fb1;
     border: 1px solid #e7baff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 400px;
 }
 
 .product-card:hover {
@@ -282,7 +289,8 @@ body {
 }
 
 .product-image {
-    width: 200px;
+    width: 100%;
+    max-width: 200px;
     height: 250px;
     border-radius: 10px;
     object-fit: cover;
@@ -295,6 +303,7 @@ body {
     color: #b668e4;
     margin: 10px 0;
     font-weight: 600;
+    flex-grow: 1;
 }
 
 .product-price {
@@ -302,6 +311,83 @@ body {
     color: #c15ae5;
     font-weight: 700;
     margin: 5px 0;
+}
+
+/* ===== АДАПТИВНОСТЬ ===== */
+@media (max-width: 1024px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 колонки на планшетах */
+        gap: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-list {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .experience-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .products-grid {
+        grid-template-columns: 1fr;
+        /* 1 колонка на мобильных */
+        gap: 20px;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .product-image {
+        max-width: 180px;
+        height: 220px;
+    }
+
+    .product-card {
+        min-height: 350px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .product-card {
+        padding: 15px;
+        min-height: 320px;
+    }
+
+    .product-image {
+        max-width: 150px;
+        height: 180px;
+    }
+
+    .product-name {
+        font-size: 16px;
+    }
+
+    .product-price {
+        font-size: 18px;
+    }
 }
 
 /* ===== КОНТАКТЫ ===== */
@@ -490,6 +576,7 @@ dialog {
 
     .products-grid {
         grid-template-columns: 1fr;
+        gap: 20px;
     }
 
     .content {
@@ -503,12 +590,26 @@ dialog {
     .btn {
         width: 100%;
     }
+
+    .product-image {
+        max-width: 150px;
+        height: 200px;
+    }
 }
 
-@media (max-width: 600px) {
-    dialog {
-        margin: 1rem;
-        width: calc(100vw - 2rem);
+@media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .product-card {
+        padding: 15px;
+    }
+
+    .product-image {
+        max-width: 120px;
+        height: 160px;
     }
 }
 

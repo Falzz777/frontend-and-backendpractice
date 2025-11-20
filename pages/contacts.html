@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Контакты</title>
     <link rel="stylesheet" href="../style/styles.css">
 </head>
+
 <body>
     <div class="page-container">
         <header class="header">
@@ -25,12 +27,12 @@
         <main class="content">
             <section class="contacts-container">
                 <h2 class="section-title">Контакты</h2>
-                
+
                 <article class="contact-info">
                     <h3>Электронная почта</h3>
                     <p>Адрес электронной почты: puckmain1000-7@dotabuff.ru</p>
                 </article>
-                
+
                 <article class="contact-info">
                     <h3>Физический адрес</h3>
                     <p>Адрес: Мид Dire</p>
@@ -95,11 +97,12 @@
 
                     <div class="form-group">
                         <label for="message">Текст обращения <span class="required">*</span></label>
-                        <textarea id="message" name="message" required placeholder="Опишите вашу проблему или вопрос..."></textarea>
+                        <textarea id="message" name="message" required
+                            placeholder="Опишите вашу проблему или вопрос..."></textarea>
                     </div>
 
                     <div class="modal-actions">
-                        <button type="submit" class="btn btn-secondary">Отмена</button>
+                        <button type="button" class="btn btn-secondary" onclick="contactModal.close()">Отмена</button>
                         <button type="button" class="btn btn-primary" onclick="submitForm()">Отправить</button>
                     </div>
                 </form>
@@ -142,18 +145,19 @@
         }
 
         // Закрытие модального окна по клику на фон
-        document.getElementById('contactModal').addEventListener('click', function(event) {
+        document.getElementById('contactModal').addEventListener('click', function (event) {
             if (event.target === this) {
                 this.close();
             }
         });
 
         // Обработка отправки формы через Enter (предотвращаем стандартное поведение)
-        document.getElementById('feedbackForm').addEventListener('keypress', function(event) {
+        document.getElementById('feedbackForm').addEventListener('keypress', function (event) {
             if (event.key === 'Enter' && event.target.type !== 'textarea') {
                 event.preventDefault();
             }
         });
     </script>
 </body>
+
 </html>
