@@ -304,6 +304,17 @@
     <script>
         // Переключение темы
         const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('.theme-toggle__icon');
+
+        // Функция для обновления иконки темы
+        function updateThemeIcon() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                themeIcon.textContent = '☀️';
+            } else {
+                themeIcon.textContent = '🌙';
+            }
+        }
 
         themeToggle.addEventListener('click', function () {
             const currentTheme = document.body.getAttribute('data-theme');
@@ -313,4 +324,28 @@
             } else {
                 document.body.setAttribute('data-theme', 'dark');
                 localStorage.setItem('theme', 'dark');
-    
+            }
+            updateThemeIcon();
+        });
+
+        // Загрузка темы из localStorage
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+        }
+        updateThemeIcon();
+
+        // Интерактивность карточек товаров
+        const productCards = document.querySelectorAll('.card--product');
+        productCards.forEach(card => {
+            card.addEventListener('click', function () {
+                // Убираем выделение у всех карточек
+                productCards.forEach(c => c.classList.remove('card--selected'));
+                // Добавляем выделение текущей карточке
+                this.classList.add('card--selected');
+            });
+        });
+    </script>
+</body>
+
+</html>
