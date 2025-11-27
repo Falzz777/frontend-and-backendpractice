@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Портфолио Баранова Павла</title>
+    <link rel="stylesheet" href="style/styles.css">
+</head>
+
+<body>
+    <div class="page" id="page">
+        <header class="header">
+            <h1 class="header__title">Портфолио Баранова Павла</h1>
+            <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+                <span class="theme-toggle__icon">🌓</span>
+            </button>
+        </header>
+
+        <nav class="nav">
+            <ul class="nav__list">
+                <li class="nav__item">
+                    <a class="nav__link nav__link--active" href="index.html">Главная</a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link" href="news.html">Новости</a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link" href="practices.html">Практики</a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link" href="goods.html">Товары</a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link" href="contacts.html">Контакты</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="content">
+            <section class="profile">
+                <h2 class="profile__title">Информация об авторе</h2>
+                <figure class="profile__figure">
+                    <img class="profile__photo" src="images/WIN_20251009_18_49_39_Pro.jpg" alt="Фото автора">
+                    <figcaption class="profile__caption">Баранов Павел</figcaption>
+                </figure>
+                <h2 class="profile__name">Баранов Павел Евгеньевич</h2>
+                <p class="profile__group">ЭФБО-12-24</p>
+            </section>
+
+            <article class="about">
+                <h3 class="about__title">Обо мне</h3>
+                <p>Родился в Москве в начале 2006 года, потом дота, кайфую на кг короче.</p>
+            </article>
+
+            <section class="skills">
+                <h3 class="skills__title">Мои навыки</h3>
+                <div class="skills__container">
+                    <div class="skills__tag">3000ч в доте</div>
+                    <div class="skills__tag">2000 ммр помойка</div>
+                    <div class="skills__tag">Начинающий dj</div>
+                    <div class="skills__tag">Могу свести 2 трека ровно</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section__title">Мой опыт работы</h2>
+                <div class="experience__grid">
+                    <article class="card card--experience">
+                        <h3 class="card__title">Лучший работник Lime</h3>
+                        <p class="card__description">Работал в Lime 6 месяцев</p>
+                    </article>
+                    <article class="card card--experience">
+                        <h3 class="card__title">Молодой предприниматель</h3>
+                        <p class="card__description">Дебуст аккаунтов за 100 рублей</p>
+                    </article>
+                    <article class="card card--experience">
+                        <h3 class="card__title">Могу все и всегда</h3>
+                        <p class="card__description">Нет</p>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>2006 ООО "Проэкт максон"</p>
+        </footer>
+    </div>
+
+    <script>
+        // Переключение темы
+        const themeToggle = document.getElementById('themeToggle');
+        const page = document.getElementById('page');
+
+        themeToggle.addEventListener('click', function () {
+            const currentTheme = document.body.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // Загрузка темы из localStorage
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+        }
+
+        // Интерактивность карточек
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('click', function () {
+                this.classList.toggle('card--selected');
+            });
+        });
+    </script>
+</body>
+
+</html>

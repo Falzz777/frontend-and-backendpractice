@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Товары - Bootstrap</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-img {
+            height: 300px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .discount-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            z-index: 2;
+        }
+
+        .price-old {
+            text-decoration: line-through;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .nav-custom {
+            background-color: #000000 !important;
+        }
+
+        .hero-products {
+            background: linear-gradient(135deg, #000000 0%, #2d2d2d 100%);
+            color: white;
+            padding: 80px 0;
+        }
+
+        .filter-btn.active {
+            background-color: #000 !important;
+            color: white !important;
+        }
+
+        .cart-badge {
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 1050;
+            overflow-y: auto;
+        }
+
+        .cart-sidebar.active {
+            right: 0;
+        }
+
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1040;
+            display: none;
+        }
+
+        .cart-overlay.active {
+            display: block;
+        }
+
+        .cart-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .quantity-input {
+            width: 40px;
+            height: 30px;
+            text-align: center;
+            border: 1px solid #ddd;
+            margin: 0 5px;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .empty-cart i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark nav-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-light" href="index.html">VOGUE x DOTA2</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="news.html">Новости</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="practices.html">Практики</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="goods.html">Товары</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contacts.html">Контакты</a>
+                    </li>
+                </ul>
+                <div class="navbar-nav">
+                    <a class="nav-link position-relative" href="#" id="cartIcon">
+                        <i class="bi bi-cart3"></i>
+                        <span class="cart-badge" id="cartBadge">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-products">
+        <div class="container text-center">
+            <h1 class="display-4 fw-light mb-3">Коллекция Vogue x Dota2</h1>
+            <p class="lead">Эксклюзивная коллекция на стыке высокой моды и игровой культуры</p>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-dark filter-btn active">Все товары</button>
+                        <button type="button" class="btn btn-outline-dark filter-btn">Одежда</button>
+                        <button type="button" class="btn btn-outline-dark filter-btn">Аксессуары</button>
+                        <button type="button" class="btn btn-outline-dark filter-btn">Со скидкой</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <!-- Product 1 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card product-card h-100">
+                        <img src="images/зфшт.jpg" class="product-img" alt="Элегантное платье">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">Элегантное платье</h5>
+                            <p class="card-text text-muted flex-grow-1">Шелковое платье в стиле Vogue с элементами Dota2
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="h5 mb-0">$450</span>
+                                <button class="btn btn-dark btn-sm add-to-cart" data-id="1"
+                                    data-name="Элегантное платье" data-price="450" data-image="images/зфшт.jpg">В
+                                    корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card product-card h-100">
+                        <span class="discount-badge">-27%</span>
+                        <img src="images/cloac.jpg" class="product-img" alt="Кожаная куртка">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">Кожаная куртка</h5>
+                            <p class="card-text text-muted flex-grow-1">Кожаная куртка премиум-класса с уникальным
+                                дизайном</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="price-old">$890</span>
+                                    <span class="h5 mb-0 text-danger ms-2">$650</span>
+                                </div>
+                                <button class="btn btn-dark btn-sm add-to-cart" data-id="2" data-name="Кожаная куртка"
+                                    data-price="650" data-image="images/cloac.jpg">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card product-card h-100">
+                        <img src="images/glimer.jpg" class="product-img" alt="Шелковая блуза">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">Шелковая блуза</h5>
+                            <p class="card-text text-muted flex-grow-1">Шелковая блуза с принтом в стиле Dota2</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="h5 mb-0">$320</span>
+                                <button class="btn btn-dark btn-sm add-to-cart" data-id="3" data-name="Шелковая блуза"
+                                    data-price="320" data-image="images/glimer.jpg">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card product-card h-100">
+                        <img src="images/Pt.jpg" class="product-img" alt="Классические туфли">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">Классические туфли</h5>
+                            <p class="card-text text-muted flex-grow-1">Кожаные туфли ручной работы</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="h5 mb-0">$280</span>
+                                <button class="btn btn-dark btn-sm add-to-cart" data-id="4"
+                                    data-name="Классические туфли" data-price="280" data-image="images/Pt.jpg">В
+                                    корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Products -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card product-card h-100">
+                        <span class="discount-badge">-15%</span>
+                        <img src="images/t-shirt.jpg" class="product-img" alt="Футболка Dota2">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">Футболка Dota2</h5>
+                            <p class="card-text text-muted flex-grow-1">Хлопковая футболка с принтом героев Dota2</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="price-old">$45</span>
+                                    <span class="h5 mb-0 text-danger ms-2">$38</span>
+                                </div>
+                                <button class="btn btn-dark btn-sm add-to-cart" data-id="5" data-name="Футболка Dota2"
+                                    data-price="38" data-image="images/t-shirt.jpg">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="card product-card h-100">
+                        <img src="images/shose.jpg" class="product-img" alt="Кроссовки Limited">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">Кроссовки Limited</h5>
+                            <p class="card-text text-muted flex-grow-1">Лимитированная серия кроссовок</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="h5 mb-0">$220</span>
+                                <button class="btn btn-dark btn-sm add-to-cart" data-id="6"
+                                    data-name="Кроссовки Limited" data-price="220" data-image="images/shose.jpg">В
+                                    корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="card product-card h-100">
+                        <img src="images/tide.jpg" class="product-img" alt="Рюкзак Gamer">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">Рюкзак Gamer</h5>
+                            <p class="card-text text-muted flex-grow-1">Стильный рюкзак для геймера</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="h5 mb-0">$180</span>
+                                <button class="btn btn-dark btn-sm add-to-cart" data-id="7" data-name="Рюкзак Gamer"
+                                    data-price="180" data-image="images/tide.jpg">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="card product-card h-100">
+                        <span class="discount-badge">-30%</span>
+                        <img src="images/cap.jpg" class="product-img" alt="Кепка Esports">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">Кепка Esports</h5>
+                            <p class="card-text text-muted flex-grow-1">Бейсболка с логотипом Dota2</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="price-old">$35</span>
+                                    <span class="h5 mb-0 text-danger ms-2">$25</span>
+                                </div>
+                                <button class="btn btn-dark btn-sm add-to-cart" data-id="8" data-name="Кепка Esports"
+                                    data-price="25" data-image="images/cap.jpg">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <i class="bi bi-truck fs-1 text-primary mb-3"></i>
+                    <h5>Бесплатная доставка</h5>
+                    <p class="text-muted">При заказе от $300</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="bi bi-shield-check fs-1 text-success mb-3"></i>
+                    <h5>Гарантия качества</h5>
+                    <p class="text-muted">30 дней на возврат</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="bi bi-headset fs-1 text-info mb-3"></i>
+                    <h5>Поддержка 24/7</h5>
+                    <p class="text-muted">Всегда на связи</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2024 ООО "Проэкт максон". Все права защищены.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white me-3"><i class="bi bi-telegram"></i></a>
+                    <a href="#" class="text-white me-3"><i class="bi bi-vk"></i></a>
+                    <a href="#" class="text-white"><i class="bi bi-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="mb-0">Корзина</h4>
+                <button class="btn-close" id="closeCart"></button>
+            </div>
+
+            <div id="cartItems">
+                <!-- Cart items will be dynamically added here -->
+                <div class="empty-cart">
+                    <i class="bi bi-cart-x"></i>
+                    <p>Ваша корзина пуста</p>
+                </div>
+            </div>
+
+            <div class="cart-totals mt-4 pt-4 border-top">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Промежуточный итог:</span>
+                    <span id="subtotal">$0</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Доставка:</span>
+                    <span id="shipping">$0</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Итого:</span>
+                    <span class="fw-bold" id="total">$0</span>
+                </div>
+                <button class="btn btn-dark w-100" id="checkoutBtn" disabled>Оформить заказ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Cart functionality
+        let cart = [];
+
+        // DOM elements
+        const cartIcon = document.getElementById('cartIcon');
+        const cartBadge = document.getElementById('cartBadge');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const cartOverlay = document.getElementById('cartOverlay');
+        const closeCart = document.getElementById('closeCart');
+        const cartItems = document.getElementById('cartItems');
+        const subtotalEl = document.getElementById('subtotal');
+        const shippingEl = document.getElementById('shipping');
+        const totalEl = document.getElementById('total');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+
+        // Open cart
+        cartIcon.addEventListener('click', function (e) {
+            e.preventDefault();
+            cartSidebar.classList.add('active');
+            cartOverlay.classList.add('active');
+        });
+
+        // Close cart
+        closeCart.addEventListener('click', function () {
+            cartSidebar.classList.remove('active');
+            cartOverlay.classList.remove('active');
+        });
+
+        cartOverlay.addEventListener('click', function () {
+            cartSidebar.classList.remove('active');
+            cartOverlay.classList.remove('active');
+        });
+
+        // Add to cart functionality
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const price = parseFloat(this.getAttribute('data-price'));
+                const image = this.getAttribute('data-image');
+
+                addToCart(id, name, price, image);
+
+                // Show toast notification
+                const toast = new bootstrap.Toast(document.getElementById('addedToCartToast'));
+                toast.show();
+            });
+        });
+
+        // Add item to cart
+        function addToCart(id, name, price, image) {
+            const existingItem = cart.find(item => item.id === id);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id,
+                    name,
+                    price,
+                    image,
+                    quantity: 1
+                });
+            }
+
+            updateCart();
+        }
+
+        // Remove item from cart
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCart();
+        }
+
+        // Update quantity
+        function updateQuantity(id, newQuantity) {
+            const item = cart.find(item => item.id === id);
+            if (item) {
+                if (newQuantity <= 0) {
+                    removeFromCart(id);
+                } else {
+                    item.quantity = newQuantity;
+                }
+                updateCart();
+            }
+        }
+
+        // Update cart UI
+        function updateCart() {
+            // Update badge
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartBadge.textContent = totalItems;
+
+            // Update cart items
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="bi bi-cart-x"></i>
+                        <p>Ваша корзина пуста</p>
+                    </div>
+                `;
+                checkoutBtn.disabled = true;
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div class="row align-items-center">
+                            <div class="col-3">
+                                <img src="${item.image}" alt="${item.name}" class="img-fluid rounded">
+                            </div>
+                            <div class="col-9">
+                                <h6 class="mb-1">${item.name}</h6>
+                                <p class="mb-1">$${item.price}</p>
+                                <div class="quantity-control">
+                                    <button class="quantity-btn decrease" data-id="${item.id}">-</button>
+                                    <input type="number" class="quantity-input" value="${item.quantity}" min="1" data-id="${item.id}">
+                                    <button class="quantity-btn increase" data-id="${item.id}">+</button>
+                                    <button class="btn btn-sm btn-outline-danger ms-2 remove-item" data-id="${item.id}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Add event listeners to quantity controls
+                document.querySelectorAll('.decrease').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const id = this.getAttribute('data-id');
+                        const item = cart.find(item => item.id === id);
+                        if (item) {
+                            updateQuantity(id, item.quantity - 1);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.increase').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const id = this.getAttribute('data-id');
+                        const item = cart.find(item => item.id === id);
+                        if (item) {
+                            updateQuantity(id, item.quantity + 1);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.quantity-input').forEach(input => {
+                    input.addEventListener('change', function () {
+                        const id = this.getAttribute('data-id');
+                        updateQuantity(id, parseInt(this.value));
+                    });
+                });
+
+                document.querySelectorAll('.remove-item').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const id = this.getAttribute('data-id');
+                        removeFromCart(id);
+                    });
+                });
+
+                checkoutBtn.disabled = false;
+            }
+
+            // Update totals
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal >= 300 ? 0 : 15;
+            const total = subtotal + shipping;
+
+            subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+            shippingEl.textContent = shipping === 0 ? 'Бесплатно' : `$${shipping.toFixed(2)}`;
+            totalEl.textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Checkout
+        checkoutBtn.addEventListener('click', function () {
+            if (cart.length > 0) {
+                alert('Заказ успешно оформлен! Спасибо за покупку!');
+                cart = [];
+                updateCart();
+                cartSidebar.classList.remove('active');
+                cartOverlay.classList.remove('active');
+            }
+        });
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+    </script>
+
+    <!-- Toast Notification -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="addedToCartToast" class="toast" role="alert">
+            <div class="toast-header">
+                <strong class="me-auto">Корзина</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                Товар добавлен в корзину!
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
